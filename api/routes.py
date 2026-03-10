@@ -40,3 +40,13 @@ def score(req: ScoreRequest, scorer: Scorer = Depends(get_scorer)):
         severity=alert.severity,
         feature_snapshot=alert.feature_snapshot,
     )
+from storage.postgres_client import get_recent_alerts, get_alert_stats
+import asyncio
+
+@router.get("/alerts")
+def recent_alerts(limit: int = 20):
+    return asyncio.run(get_recent_alerts(limit))
+
+@router.get("/alerts/stats")
+def alert_stats():
+    return asyncio.run(get_alert_stats())
